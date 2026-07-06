@@ -1,0 +1,19 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/tilesets/grass.png" id="1_2rrrn"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tilesets/walls/walls.png" id="2_438mn"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbya1"]
+texture = ExtResource("1_2rrrn")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_me7d8"]
+texture = ExtResource("2_438mn")
+1:5/0 = 0
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[resource]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 0
+sources/0 = SubResource("TileSetAtlasSource_gbya1")
+sources/1 = SubResource("TileSetAtlasSource_me7d8")

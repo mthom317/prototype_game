@@ -27,6 +27,25 @@ This is intentionally lightweight (no release branches, no gitflow
 ceremony) because it's two people on one game, not a large team needing
 strict release trains.
 
+## Issues, Milestones, and the Project board
+
+Work is tracked as one [GitHub Issue](https://github.com/mthom317/prototype_game/issues)
+per feature (coarse-grained, with an acceptance-criteria checklist inside —
+not split into many tiny sub-issues). Issues are grouped into Milestones
+that mirror `06-roadmap.md`'s M1–M5, and surfaced on the
+[Project board](https://github.com/users/mthom317/projects/1) so both of you
+can see who's working on what without syncing live, which matters more when
+you're remote from each other.
+
+- Name feature branches after the issue: `feature/4-hitbox-hurtbox` for
+  issue #4.
+- Reference the issue in the PR description with `Closes #4` — GitHub
+  auto-closes the issue and moves the Project board card when the PR
+  merges.
+- Pick issues from the current milestone's column on the Project board;
+  drag your card to "In Progress" when you start so your teammate can see
+  it at a glance.
+
 ## This is enforced, not just a convention
 
 A GitHub branch protection rule on `main` enforces the above:

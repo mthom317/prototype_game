@@ -4,6 +4,41 @@ Each milestone builds on the previous one. Don't start a milestone's systems
 before the one before it is working and merged — the whole point of small
 milestones is to keep the game *playable* (even if tiny) at every step.
 
+## Suggested division of labor (2 devs, no art skill, large asset library)
+
+Neither of you is an artist, but "art" work here is really **asset
+integration** work — sourcing/license-checking packs, slicing spritesheets,
+building `TileSet` resources, setting import presets for crisp pixel art —
+which is a learnable, non-artistic skill in its own right.
+
+Rather than splitting by milestone (one person owns M1, the other M2), split
+**horizontally by layer**, since M1 and M2 don't hard-depend on each other
+(see each milestone's "Depends on" line below) and can run in parallel right
+now:
+
+- **Systems/gameplay dev**: combat logic, ability logic, save system — code
+  that doesn't care what the sprites look like. Starts on M1 now (issues
+  [#4](https://github.com/mthom317/prototype_game/issues/4)–[#7](https://github.com/mthom317/prototype_game/issues/7)
+  on the [Project board](https://github.com/users/mthom317/projects/1)).
+- **Content pipeline dev**: asset sourcing, TileSet/import setup, wiring
+  sprites onto the scenes the other dev already scaffolded (`Player.tscn`,
+  future enemy scenes). Starts on M2's asset groundwork now (issues
+  [#8](https://github.com/mthom317/prototype_game/issues/8)–[#10](https://github.com/mthom317/prototype_game/issues/10)).
+
+This works because a scene's visual node (`Sprite2D`/`AnimatedSprite2D`) is
+separate from its collision/script logic — reskinning `Player.tscn` doesn't
+touch `Player.gd`, so both workstreams land in mostly non-overlapping files
+and merge cleanly. Swap roles per milestone if you'd rather both get
+exposure to both kinds of work — the split is about parallelizing right now,
+not a permanent assignment.
+
+Track work via [GitHub Issues](https://github.com/mthom317/prototype_game/issues)
+(one issue per feature, milestones mirror M1–M5 below) and the
+[Project board](https://github.com/users/mthom317/projects/1) for an
+at-a-glance view of who's working on what — useful since you're remote from
+each other. See `notes/04-git-github-workflow.md` for how issues connect to
+the branch/PR flow.
+
 ## M0 — Project scaffolding + vertical slice (this pass)
 
 - Standalone git repo, Git LFS configured, GitHub remote wired up.

@@ -27,6 +27,25 @@ This is intentionally lightweight (no release branches, no gitflow
 ceremony) because it's two people on one game, not a large team needing
 strict release trains.
 
+## This is enforced, not just a convention
+
+A GitHub branch protection rule on `main` enforces the above:
+
+- Direct pushes to `main` are blocked for everyone, including repo admins —
+  all changes must go through a PR.
+- Both CI jobs (`Lint GDScript`, `Headless Export Validation`) must report
+  success on the PR's head commit before the merge button unlocks.
+- The PR branch must be up to date with `main` before merging.
+- No mandatory human review is required (`required_approving_review_count`
+  is 0) — either developer can self-merge once CI is green. This can be
+  raised to require the other teammate's approval later if the team wants
+  more oversight, at the cost of blocking merges when only one person is
+  available.
+- Force-pushes and deletion of `main` are disabled.
+
+To change these settings, go to the repo's Settings → Branches → the rule
+on `main`, or use `gh api repos/mthom317/prototype_game/branches/main/protection`.
+
 ## Git LFS: what's tracked and why
 
 `.gitattributes` tracks these binary types through LFS:

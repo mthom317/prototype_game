@@ -30,7 +30,7 @@ jobs:
     name: Headless Export Validation
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:4.3
+      image: barichello/godot-ci:4.7
     env:
       # GitHub Actions remaps $HOME to /github/home inside container jobs,
       # but this image's export templates are baked into /root/.local/share.

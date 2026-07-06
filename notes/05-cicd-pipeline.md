@@ -20,8 +20,8 @@ result. `gdlint` failures print the specific rule and line; fix and repush.
 
 ## Job 2: `export`
 
-Runs inside the `barichello/godot-ci:4.3` Docker container — a
-community-maintained image with Godot 4.3 and its export templates
+Runs inside the `barichello/godot-ci:4.7` Docker container — a
+community-maintained image with Godot 4.7 and its export templates
 pre-installed, so CI doesn't need to download/install Godot itself. This is
 the **only** place Docker is used in this project; local development is
 still just the normal Godot editor GUI.
@@ -50,7 +50,7 @@ Steps:
 
 ## Known gotchas
 
-- **Pin the Docker image tag exactly** (`barichello/godot-ci:4.3`, never
+- **Pin the Docker image tag exactly** (`barichello/godot-ci:4.7`, never
   `:latest`). The image's bundled export templates must match the
   project's Godot version — if the local editor is ever upgraded, bump this
   tag deliberately in the same change.

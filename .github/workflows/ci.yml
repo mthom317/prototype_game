@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint GDScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install gdtoolkit
+        run: pip install "gdtoolkit==4.*"
+
+      - name: Check formatting (gdformat)
+        run: gdformat --check --diff scripts/
+
+      - name: Lint (gdlint)
+        run: gdlint scripts/
+
+  export:
+    name: Headless Export Validation
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Prepare export output directory
+        run: mkdir -v -p builds/linux
+
+      - name: Import project resources
+        run: godot --headless --verbose --path . --editor --quit-after 60 || true
+
+      - name: Validate scenes load without errors
+        run: |
+          godot --headless --path . --quit 2>&1 | tee /tmp/godot_boot.log
+          if grep -iE "SCRIPT ERROR|Parse Error|Failed to load" /tmp/godot_boot.log; then
+            echo "Godot reported errors during boot/load."
+            exit 1
+          fi
+
+      - name: Export Linux/X11 build
+        run: godot --headless --path . --export-release "Linux/X11" builds/linux/prototype.x86_64
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: prototype-linux-build
+          path: builds/linux/
+          if-no-files-found: error

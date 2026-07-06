@@ -1,0 +1,13 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Export build output (CI artifacts land here; not committed)
+/builds/
+
+# macOS
+.DS_Store
+
+# Editor/OS cruft
+*.tmp
+*.log

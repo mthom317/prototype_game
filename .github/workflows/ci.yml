@@ -31,6 +31,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:4.3
+    env:
+      # GitHub Actions remaps $HOME to /github/home inside container jobs,
+      # but this image's export templates are baked into /root/.local/share.
+      # Without this, Godot can't find them and export fails.
+      HOME: /root
     steps:
       - uses: actions/checkout@v4
         with:

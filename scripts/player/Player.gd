@@ -2,24 +2,65 @@ extends CharacterBody2D
 
 enum Facing { DOWN, UP, SIDE }
 
+const ATTACK_DURATION := 0.3
+const ATTACK_COOLDOWN := 0.15
+const ATTACK_HITBOX_OFFSET := 12.0
+
 @export var speed: float = 120.0
 
 var facing: Facing = Facing.DOWN
+var is_attacking: bool = false
+var can_attack: bool = true
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health: Health = $Health
 @onready var hurtbox: Hurtbox = $Hurtbox
+@onready var hitbox: Hitbox = $Hitbox
 
 
 func _ready() -> void:
 	hurtbox.damaged.connect(_on_hurtbox_damaged)
+	hitbox.monitoring = false
 
 
 func _physics_process(_delta: float) -> void:
-	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	velocity = input_vector * speed
+	if Input.is_action_just_pressed("attack") and can_attack and not is_attacking:
+		_start_attack()
+
+	if is_attacking:
+		velocity = Vector2.ZERO
+	else:
+		var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		velocity = input_vector * speed
+		_update_animation(input_vector)
+
 	move_and_slide()
-	_update_animation(input_vector)
+
+
+func _start_attack() -> void:
+	is_attacking = true
+	can_attack = false
+	animated_sprite.play("attack_" + _facing_suffix())
+	_position_hitbox()
+	hitbox.monitoring = true
+
+	await get_tree().create_timer(ATTACK_DURATION).timeout
+	hitbox.monitoring = false
+	is_attacking = false
+
+	await get_tree().create_timer(ATTACK_COOLDOWN).timeout
+	can_attack = true
+
+
+func _position_hitbox() -> void:
+	match facing:
+		Facing.UP:
+			hitbox.position = Vector2(0, -ATTACK_HITBOX_OFFSET)
+		Facing.SIDE:
+			var direction := -1.0 if animated_sprite.flip_h else 1.0
+			hitbox.position = Vector2(direction * ATTACK_HITBOX_OFFSET, 0)
+		_:
+			hitbox.position = Vector2(0, ATTACK_HITBOX_OFFSET)
 
 
 func _on_hurtbox_damaged(amount: int, _hitbox: Hitbox) -> void:

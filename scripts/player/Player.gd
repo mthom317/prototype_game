@@ -19,6 +19,7 @@ var can_attack: bool = true
 
 
 func _ready() -> void:
+	add_to_group("player")
 	hurtbox.damaged.connect(_on_hurtbox_damaged)
 	hitbox.monitoring = false
 

@@ -7,6 +7,12 @@ enum Facing { DOWN, UP, SIDE }
 var facing: Facing = Facing.DOWN
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var health: Health = $Health
+@onready var hurtbox: Hurtbox = $Hurtbox
+
+
+func _ready() -> void:
+	hurtbox.damaged.connect(_on_hurtbox_damaged)
 
 
 func _physics_process(_delta: float) -> void:
@@ -14,6 +20,19 @@ func _physics_process(_delta: float) -> void:
 	velocity = input_vector * speed
 	move_and_slide()
 	_update_animation(input_vector)
+
+
+func _on_hurtbox_damaged(amount: int, _hitbox: Hitbox) -> void:
+	health.apply_damage(amount)
+	_flash_invincibility()
+
+
+func _flash_invincibility() -> void:
+	var loops: int = maxi(1, int(hurtbox.invincibility_duration / 0.2))
+	var tween := create_tween()
+	tween.set_loops(loops)
+	tween.tween_property(animated_sprite, "modulate:a", 0.3, 0.1)
+	tween.tween_property(animated_sprite, "modulate:a", 1.0, 0.1)
 
 
 func _update_animation(input_vector: Vector2) -> void:

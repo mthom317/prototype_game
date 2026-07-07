@@ -6,6 +6,11 @@ milestones is to keep the game *playable* (even if tiny) at every step.
 
 ## Suggested division of labor (2 devs, no art skill, large asset library)
 
+> **Update (notes/07-design-questions.md section 9):** this horizontal
+> split is no longer in effect — decided to have both devs work across
+> any open issue regardless of area. Left below for historical context
+> on why issues were originally grouped this way.
+
 Neither of you is an artist, but "art" work here is really **asset
 integration** work — sourcing/license-checking packs, slicing spritesheets,
 building `TileSet` resources, setting import presets for crisp pixel art —

@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemySlime.tscn" id="8_slime"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemySkull.tscn" id="9_skull"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemyBear.tscn" id="10_bear"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/EnemyMushroom.tscn" id="11_mushroom"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/EnemySnake.tscn" id="12_snake"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbya1"]
 texture = ExtResource("1_rlhha")
@@ -49,6 +51,12 @@ position = Vector2(240, 70)
 
 [node name="EnemyBear" parent="." instance=ExtResource("10_bear")]
 position = Vector2(100, 50)
+
+[node name="EnemyMushroom" parent="." instance=ExtResource("11_mushroom")]
+position = Vector2(280, 140)
+
+[node name="EnemySnake" parent="." instance=ExtResource("12_snake")]
+position = Vector2(60, 140)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

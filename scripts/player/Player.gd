@@ -11,6 +11,7 @@ const ATTACK_HITBOX_OFFSET := 12.0
 var facing: Facing = Facing.DOWN
 var is_attacking: bool = false
 var can_attack: bool = true
+var potion_count: int = 0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health: Health = $Health
@@ -27,6 +28,9 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and can_attack and not is_attacking:
 		_start_attack()
+
+	if Input.is_action_just_pressed("use_item"):
+		_use_item()
 
 	if is_attacking:
 		velocity = Vector2.ZERO
@@ -62,6 +66,25 @@ func _position_hitbox() -> void:
 			hitbox.position = Vector2(direction * ATTACK_HITBOX_OFFSET, 0)
 		_:
 			hitbox.position = Vector2(0, ATTACK_HITBOX_OFFSET)
+
+
+func pick_up_potion() -> void:
+	potion_count += 1
+
+
+func _use_item() -> void:
+	if not _should_consume_potion(potion_count):
+		return
+	potion_count -= 1
+	# Placeholder heal amount: fills all hearts regardless of how much was
+	# missing. Tune to a fixed restore amount once the design settles.
+	health.heal(health.max_health)
+
+
+## Pure decision kept separate from node state so it's directly
+## unit-testable: consuming requires at least one potion in reserve.
+func _should_consume_potion(count: int) -> bool:
+	return count > 0
 
 
 func _on_hurtbox_damaged(amount: int, _hitbox: Hitbox) -> void:

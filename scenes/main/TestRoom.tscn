@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemySlime.tscn" id="8_slime"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemySkull.tscn" id="9_skull"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemyBear.tscn" id="10_bear"]
+[ext_resource type="PackedScene" path="res://scenes/items/HealingPotion.tscn" id="11_potion"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbya1"]
 texture = ExtResource("1_rlhha")
@@ -49,6 +50,12 @@ position = Vector2(240, 70)
 
 [node name="EnemyBear" parent="." instance=ExtResource("10_bear")]
 position = Vector2(100, 50)
+
+[node name="HealingPotion" parent="." instance=ExtResource("11_potion")]
+position = Vector2(180, 140)
+
+[node name="HealingPotion2" parent="." instance=ExtResource("11_potion")]
+position = Vector2(80, 100)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

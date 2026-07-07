@@ -23,10 +23,3 @@ func open(speaker_name: String, text: String) -> void:
 
 func close() -> void:
 	hide()
-
-
-## Pure: given the current visibility state, returns whether opening
-## should be a no-op (already open) - kept as a helper so the open/close
-## decision is unit-testable without a live CanvasLayer.
-func _should_open(is_open: bool) -> bool:
-	return not is_open

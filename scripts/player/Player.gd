@@ -7,14 +7,32 @@ const ATTACK_COOLDOWN := 0.15
 const ATTACK_HITBOX_OFFSET := 12.0
 const ICE_STEER_FACTOR := 0.06
 
+## Hold-vs-tap threshold: releasing "attack" before this many seconds have
+## elapsed is a combo tap; at/after this it's a charged hit.
+const CHARGE_THRESHOLD := 0.35
+## How long after a combo hit's active window closes a follow-up tap still
+## chains the combo, rather than starting a fresh one.
+const COMBO_WINDOW := 0.35
+const CHARGE_ATTACK_DURATION := 0.4
+const COMBO_HIT_DAMAGE := 1
+const COMBO_FINISHER_DAMAGE := 2
+const CHARGED_DAMAGE := 3
+const COMBO_FINISHER_HITBOX_SCALE := 1.2
+const CHARGED_HITBOX_SCALE := 1.6
+const CHARGE_TELEGRAPH_COLOR := Color(1.4, 1.4, 0.6)
+
 @export var speed: float = 120.0
 
 var facing: Facing = Facing.DOWN
 var is_attacking: bool = false
 var can_attack: bool = true
+var combo_step: int = 0
+var is_charging: bool = false
 var potion_count: int = 0
 var has_boots: bool = false
 var _on_ice: bool = false
+var _charge_start_msec: int = 0
+var _charge_tween: Tween
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health: Health = $Health
@@ -29,13 +47,20 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("attack") and can_attack and not is_attacking:
-		_start_attack()
+	if (
+		Input.is_action_just_pressed("attack")
+		and can_attack
+		and not is_attacking
+		and not is_charging
+	):
+		_begin_charge()
+	elif is_charging and Input.is_action_just_released("attack"):
+		_release_charge()
 
 	if Input.is_action_just_pressed("use_item"):
 		_use_item()
 
-	if is_attacking:
+	if is_attacking or is_charging:
 		velocity = Vector2.ZERO
 	else:
 		var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -45,19 +70,97 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 
-func _start_attack() -> void:
+func _begin_charge() -> void:
+	is_charging = true
+	can_attack = false
+	_charge_start_msec = Time.get_ticks_msec()
+	_start_charge_telegraph()
+
+
+func _release_charge() -> void:
+	var held_seconds := (Time.get_ticks_msec() - _charge_start_msec) / 1000.0
+	is_charging = false
+	_stop_charge_telegraph()
+
+	if _is_charged_hold(held_seconds):
+		_perform_charged_hit()
+	else:
+		_perform_combo_hit()
+
+
+func _start_charge_telegraph() -> void:
+	_charge_tween = create_tween()
+	_charge_tween.set_loops()
+	_charge_tween.tween_property(animated_sprite, "modulate", CHARGE_TELEGRAPH_COLOR, 0.15)
+	_charge_tween.tween_property(animated_sprite, "modulate", Color.WHITE, 0.15)
+
+
+func _stop_charge_telegraph() -> void:
+	if _charge_tween:
+		_charge_tween.kill()
+	animated_sprite.modulate = Color.WHITE
+
+
+## Pure: whether a hold this long counts as a charged hit rather than a tap.
+func _is_charged_hold(held_seconds: float) -> bool:
+	return held_seconds >= CHARGE_THRESHOLD
+
+
+## Pure: damage dealt by the combo hit at the given step (0/1 = base, 2 = finisher).
+func _combo_hit_damage(step: int) -> int:
+	return COMBO_FINISHER_DAMAGE if step == 2 else COMBO_HIT_DAMAGE
+
+
+## Pure: hitbox scale for the combo hit at the given step.
+func _combo_hit_scale(step: int) -> float:
+	return COMBO_FINISHER_HITBOX_SCALE if step == 2 else 1.0
+
+
+## Pure: the combo step that follows the given one (2, the finisher, wraps to 0).
+func _next_combo_step(step: int) -> int:
+	return 0 if step == 2 else step + 1
+
+
+func _perform_combo_hit() -> void:
+	var step := combo_step
+	combo_step = _next_combo_step(step)
+	_perform_attack_hit(_combo_hit_damage(step), _combo_hit_scale(step), ATTACK_DURATION, 0.0)
+
+
+func _perform_charged_hit() -> void:
+	combo_step = 0
+	_perform_attack_hit(
+		CHARGED_DAMAGE, CHARGED_HITBOX_SCALE, CHARGE_ATTACK_DURATION, ATTACK_COOLDOWN
+	)
+
+
+func _perform_attack_hit(
+	damage: int, hitbox_scale: float, duration: float, recovery_cooldown: float
+) -> void:
 	is_attacking = true
 	can_attack = false
+	hitbox.damage = damage
+	hitbox.scale = Vector2.ONE * hitbox_scale
 	animated_sprite.play("attack_" + _facing_suffix())
 	_position_hitbox()
 	hitbox.monitoring = true
 
-	await get_tree().create_timer(ATTACK_DURATION).timeout
+	await get_tree().create_timer(duration).timeout
 	hitbox.monitoring = false
+	hitbox.scale = Vector2.ONE
 	is_attacking = false
 
-	await get_tree().create_timer(ATTACK_COOLDOWN).timeout
+	if recovery_cooldown > 0.0:
+		await get_tree().create_timer(recovery_cooldown).timeout
+		can_attack = true
+		return
+
 	can_attack = true
+
+	var expected_step := combo_step
+	await get_tree().create_timer(COMBO_WINDOW).timeout
+	if combo_step == expected_step and not is_attacking:
+		combo_step = 0
 
 
 func _position_hitbox() -> void:

@@ -80,31 +80,87 @@ func test_position_hitbox_side_facing_flipped() -> void:
 	assert_eq(player.hitbox.position, Vector2(-player.ATTACK_HITBOX_OFFSET, 0))
 
 
-func test_start_attack_immediately_sets_attacking_and_enables_hitbox() -> void:
+func test_perform_combo_hit_immediately_sets_attacking_and_enables_hitbox() -> void:
 	player.facing = player.Facing.DOWN
-	player._start_attack()
+	player._perform_combo_hit()
 	assert_true(player.is_attacking)
 	assert_false(player.can_attack)
 	assert_true(player.hitbox.monitoring)
 	assert_eq(player.animated_sprite.animation, "attack_down")
 	assert_eq(player.hitbox.position, Vector2(0, player.ATTACK_HITBOX_OFFSET))
-	# Drain the attack-window coroutine before the test ends so its two
-	# create_timer() awaits don't keep ticking into (and skew the timing
-	# of) whichever test runs next.
-	await wait_seconds(player.ATTACK_DURATION + player.ATTACK_COOLDOWN + 0.05)
+	# Drain the attack-window + combo-window coroutine before the test ends
+	# so its create_timer() awaits don't keep ticking into (and skew the
+	# timing of) whichever test runs next.
+	await wait_seconds(player.ATTACK_DURATION + player.COMBO_WINDOW + 0.05)
 
 
-func test_start_attack_ends_attack_window_after_attack_duration() -> void:
-	player._start_attack()
+func test_perform_combo_hit_ends_attack_window_after_attack_duration() -> void:
+	player._perform_combo_hit()
 	await wait_seconds(player.ATTACK_DURATION + 0.05)
 	assert_false(player.is_attacking)
 	assert_false(player.hitbox.monitoring)
-	# Cooldown hasn't elapsed yet.
-	assert_false(player.can_attack)
-
-
-func test_start_attack_can_attack_again_after_full_cooldown() -> void:
-	player._start_attack()
-	await wait_seconds(player.ATTACK_DURATION + player.ATTACK_COOLDOWN + 0.05)
+	# A combo hit allows immediate chaining - no dead cooldown.
 	assert_true(player.can_attack)
-	assert_false(player.is_attacking)
+	await wait_seconds(player.COMBO_WINDOW + 0.05)
+
+
+func test_combo_step_resets_after_window_expires_with_no_follow_up() -> void:
+	player._perform_combo_hit()
+	await wait_seconds(player.ATTACK_DURATION + player.COMBO_WINDOW + 0.05)
+	assert_eq(player.combo_step, 0)
+
+
+func test_combo_hit_damage_and_scale_by_step() -> void:
+	assert_eq(player._combo_hit_damage(0), player.COMBO_HIT_DAMAGE)
+	assert_eq(player._combo_hit_damage(1), player.COMBO_HIT_DAMAGE)
+	assert_eq(player._combo_hit_damage(2), player.COMBO_FINISHER_DAMAGE)
+	assert_eq(player._combo_hit_scale(0), 1.0)
+	assert_eq(player._combo_hit_scale(1), 1.0)
+	assert_eq(player._combo_hit_scale(2), player.COMBO_FINISHER_HITBOX_SCALE)
+
+
+func test_next_combo_step_cycles_and_wraps() -> void:
+	assert_eq(player._next_combo_step(0), 1)
+	assert_eq(player._next_combo_step(1), 2)
+	assert_eq(player._next_combo_step(2), 0)
+
+
+func test_is_charged_hold_threshold() -> void:
+	assert_false(player._is_charged_hold(player.CHARGE_THRESHOLD - 0.1))
+	assert_true(player._is_charged_hold(player.CHARGE_THRESHOLD))
+	assert_true(player._is_charged_hold(player.CHARGE_THRESHOLD + 0.1))
+
+
+func test_three_combo_hits_in_sequence_reach_finisher_and_wrap() -> void:
+	player._perform_combo_hit()
+	await wait_seconds(player.ATTACK_DURATION + 0.05)
+	assert_eq(player.combo_step, 1)
+
+	player._perform_combo_hit()
+	await wait_seconds(player.ATTACK_DURATION + 0.05)
+	assert_eq(player.combo_step, 2)
+
+	player._perform_combo_hit()
+	assert_eq(player.hitbox.damage, player.COMBO_FINISHER_DAMAGE)
+	assert_eq(player.hitbox.scale, Vector2.ONE * player.COMBO_FINISHER_HITBOX_SCALE)
+	await wait_seconds(player.ATTACK_DURATION + player.COMBO_WINDOW + 0.05)
+	assert_eq(player.combo_step, 0)
+
+
+func test_perform_charged_hit_uses_bigger_damage_and_scale() -> void:
+	player.facing = player.Facing.DOWN
+	player.combo_step = 1
+	player._perform_charged_hit()
+	assert_eq(player.combo_step, 0)
+	assert_eq(player.hitbox.damage, player.CHARGED_DAMAGE)
+	assert_eq(player.hitbox.scale, Vector2.ONE * player.CHARGED_HITBOX_SCALE)
+	assert_true(player.hitbox.monitoring)
+	await wait_seconds(player.CHARGE_ATTACK_DURATION + player.ATTACK_COOLDOWN + 0.05)
+
+
+func test_perform_charged_hit_requires_full_cooldown_before_can_attack() -> void:
+	player._perform_charged_hit()
+	await wait_seconds(player.CHARGE_ATTACK_DURATION + 0.05)
+	assert_false(player.can_attack)
+	await wait_seconds(player.ATTACK_COOLDOWN + 0.05)
+	assert_true(player.can_attack)

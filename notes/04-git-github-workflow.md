@@ -46,6 +46,41 @@ you're remote from each other.
   drag your card to "In Progress" when you start so your teammate can see
   it at a glance.
 
+## Category labels: a third, orthogonal axis
+
+Every issue carries labels along three independent axes, which answer three
+different questions and shouldn't be conflated:
+
+- **`area: *`** (blue) — *where* in the game a task lives: `area: combat`,
+  `area: player`, `area: world`, `area: ui`, `area: art-integration`,
+  `area: audio`, `area: tooling`.
+- **Type** (`bug`, `enhancement`, `chore`, etc.) — *what kind* of change it
+  is.
+- **`category: *`** — *which part of the overall project workstream* the
+  task belongs to, regardless of area or type:
+  - `category: game-dev` — actual gameplay features, content, or bugs in
+    the game itself. Most issues fall here (e.g. #4-7, #9, #10, #20).
+  - `category: testing` — testing infrastructure, QA process, or
+    playtesting work, as distinct from the game feature being tested.
+    Nothing currently uses this label, but it exists so future
+    testing-harness/QA work has a home.
+  - `category: chore` — maintenance or admin work that isn't building a
+    feature (e.g. #8's asset-licensing check: it's a compliance/legal
+    research task with no game code or content as output, so it's a chore
+    even though it's a hard blocker for M2).
+  - `category: ai-tooling` — meta-tooling specifically about how Claude
+    Code operates in this repo, as opposed to tooling that ships with the
+    game (e.g. #17 CLAUDE.md, #18 the `/session-start` skill).
+
+Every issue should get exactly one `category:` label alongside its `area:`
+and type labels — apply it when the issue is filed, the same way `area:`
+and type labels are applied.
+
+On the Project board, this is also modeled as a single-select **Category**
+field (Game/Dev, Testing, Chore, AI/Claude Tooling), kept in sync with the
+label, so the board can be grouped by workstream in addition to filtering
+by label.
+
 ## This is enforced, not just a convention
 
 A GitHub branch protection rule on `main` enforces the above:

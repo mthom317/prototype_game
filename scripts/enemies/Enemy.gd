@@ -25,6 +25,8 @@ func _ready() -> void:
 	hurtbox.damaged.connect(_on_hurtbox_damaged)
 	health.died.connect(_on_died)
 	hitbox.damage = contact_damage
+	hitbox.source = self
+	hurtbox.source = self
 	_player = get_tree().get_first_node_in_group("player")
 
 

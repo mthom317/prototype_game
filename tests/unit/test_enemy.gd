@@ -68,6 +68,21 @@ func test_hurtbox_damage_applies_to_health() -> void:
 	assert_eq(enemy.health.current_health, starting_health - 1)
 
 
+func test_hitbox_and_hurtbox_are_wired_to_same_source() -> void:
+	assert_eq(enemy.hitbox.source, enemy)
+	assert_eq(enemy.hurtbox.source, enemy)
+
+
+func test_does_not_self_damage_on_spawn_via_physics() -> void:
+	# Regression: EnemyBear/etc. give their Hitbox and Hurtbox the exact
+	# same shape and position, and the Hitbox monitors by default (unlike
+	# the player's, which starts disabled) - without the source check,
+	# every enemy took its own contact damage the instant it spawned.
+	var starting_health := enemy.health.current_health
+	await wait_physics_frames(2)
+	assert_eq(enemy.health.current_health, starting_health)
+
+
 func test_died_stops_physics_and_disables_hitbox() -> void:
 	enemy.health.apply_damage(enemy.health.max_health)
 	assert_false(enemy.is_physics_processing())

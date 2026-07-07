@@ -7,6 +7,9 @@
 [ext_resource type="Script" path="res://scripts/main/TestRoom.gd" id="5_testroom"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HealthUI.tscn" id="6_healthui"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/SpikeTrap.tscn" id="7_spiketrap"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/EnemySlime.tscn" id="8_slime"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/EnemySkull.tscn" id="9_skull"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/EnemyBear.tscn" id="10_bear"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbya1"]
 texture = ExtResource("1_rlhha")
@@ -37,6 +40,15 @@ script = ExtResource("4_rvuj5")
 
 [node name="SpikeTrap" parent="." instance=ExtResource("7_spiketrap")]
 position = Vector2(224, 96)
+
+[node name="EnemySlime" parent="." instance=ExtResource("8_slime")]
+position = Vector2(140, 140)
+
+[node name="EnemySkull" parent="." instance=ExtResource("9_skull")]
+position = Vector2(240, 70)
+
+[node name="EnemyBear" parent="." instance=ExtResource("10_bear")]
+position = Vector2(100, 50)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

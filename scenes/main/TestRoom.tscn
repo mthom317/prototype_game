@@ -54,10 +54,10 @@ position = Vector2(240, 70)
 position = Vector2(100, 50)
 
 [node name="EnemyMushroom" parent="." instance=ExtResource("11_mushroom")]
-position = Vector2(280, 140)
+position = Vector2(220, 140)
 
 [node name="EnemySnake" parent="." instance=ExtResource("12_snake")]
-position = Vector2(60, 140)
+position = Vector2(110, 130)
 
 [node name="HealingPotion" parent="." instance=ExtResource("13_potion")]
 position = Vector2(180, 140)

@@ -26,6 +26,24 @@ jobs:
       - name: Lint (gdlint)
         run: gdlint scripts/
 
+  test:
+    name: GUT Unit Tests
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7
+    env:
+      HOME: /root
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Import project resources
+        run: godot --headless --verbose --path . --editor --quit-after 60 || true
+
+      - name: Run GUT test suite
+        run: godot --headless --path . -s addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json
+
   export:
     name: Headless Export Validation
     runs-on: ubuntu-latest

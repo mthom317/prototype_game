@@ -67,6 +67,8 @@ questions until we get to them.
 
 - Tile size/grid (16x16, 32x32?) — affects the 320x180 base resolution
   we already locked in.
+  - **Decision:** 16x16, matching the already-imported Ninja Adventure
+    Asset Pack (see issue #8 and `notes/08-tileset-setup.md`).
 - Any specific palette/art-style reference points?
 - Music scope — per-area themes, chiptune-style, how much original audio
   are we budgeting for?

@@ -1,7 +1,8 @@
 extends Node2D
 
-## Composition root: wires the player's Health to the HUD without either
-## of them knowing about each other.
+## Sandbox scene for iterating on a single feature (combat, items, NPC
+## interactions) without booting the full game. Spawns only the player on an
+## open floor; use the debug menu (V key) to spawn whatever you're testing.
 
 @onready var player_health: Health = $Player/Health
 @onready var health_ui: HealthUI = $HUD/HealthUI

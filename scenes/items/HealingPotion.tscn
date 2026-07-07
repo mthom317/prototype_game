@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/HealingPotion.gd" id="1_healingpotion"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/pack/Potion/LifePot.png" id="2_lifepot"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(18, 22)
+
+[node name="HealingPotion" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_healingpotion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_lifepot")

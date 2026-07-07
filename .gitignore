@@ -2,6 +2,10 @@
 .godot/
 /android/
 
+# Generated on every editor/import pass (CI re-imports from scratch too,
+# see .github/workflows/ci.yml); committing these is pure churn.
+*.import
+
 # Export build output (CI artifacts land here; not committed)
 /builds/
 

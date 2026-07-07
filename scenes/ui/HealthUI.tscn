@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/HealthUI.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/heart.png" id="2_heart"]
+
+[node name="HealthUI" type="Control"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 68.0
+offset_bottom = 20.0
+mouse_filter = 2
+script = ExtResource("1_script")
+heart_sheet = ExtResource("2_heart")

@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameManager="*res://scripts/autoloads/GameManager.gd"
 DebugMenu="*res://scenes/ui/DebugMenu.tscn"
+SceneTransition="*res://scripts/autoloads/SceneTransition.gd"
 
 [display]
 

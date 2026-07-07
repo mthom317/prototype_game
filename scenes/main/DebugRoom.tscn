@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3_lk1q1"]
 [ext_resource type="Script" path="res://scripts/player/Player.gd" id="4_1ywow"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HealthUI.tscn" id="5_healthui"]
+[ext_resource type="PackedScene" path="res://scenes/world/RoomTransitionTrigger.tscn" id="7_trigger"]
 
 [node name="DebugRoom" type="Node2D" unique_id=1194466854]
 script = ExtResource("1_4d4cx")
@@ -21,3 +22,11 @@ script = ExtResource("4_1ywow")
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="HealthUI" parent="HUD" instance=ExtResource("5_healthui")]
+
+[node name="SpawnPoint_from_test_room" type="Marker2D" parent="."]
+position = Vector2(184, 136)
+
+[node name="ToTestRoom" parent="." instance=ExtResource("7_trigger")]
+position = Vector2(232, 136)
+target_scene_path = "res://scenes/main/TestRoom.tscn"
+target_spawn_id = "from_debug_room"

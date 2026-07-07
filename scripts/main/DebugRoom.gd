@@ -9,5 +9,6 @@ extends Node2D
 
 
 func _ready() -> void:
+	SceneTransition.place_player_at_spawn(self)
 	player_health.health_changed.connect(health_ui.set_health)
 	health_ui.set_health(player_health.current_health, player_health.max_health)

@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" path="res://resources/tilesets/room_tileset.tres" id="2_mckca"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3_lk1q1"]
 [ext_resource type="Script" path="res://scripts/player/Player.gd" id="4_1ywow"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HealthUI.tscn" id="5_healthui"]
 
 [node name="DebugRoom" type="Node2D" unique_id=1194466854]
 script = ExtResource("1_4d4cx")
@@ -16,3 +17,7 @@ tile_set = ExtResource("2_mckca")
 position = Vector2(128, 128)
 collision_layer = 2
 script = ExtResource("4_1ywow")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="HealthUI" parent="HUD" instance=ExtResource("5_healthui")]

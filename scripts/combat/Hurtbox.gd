@@ -11,6 +11,11 @@ signal damaged(amount: int, hitbox: Hitbox)
 
 @export var invincibility_duration: float = 0.0
 
+## The body (player/enemy) this hurtbox belongs to, set by the owner in
+## its _ready(). Lets a Hitbox with the same source skip damaging it -
+## see Hitbox._is_same_source.
+var source: Node
+
 var invincible: bool = false
 
 

@@ -44,6 +44,8 @@ func _ready() -> void:
 	add_to_group("player")
 	hurtbox.damaged.connect(_on_hurtbox_damaged)
 	hitbox.monitoring = false
+	hitbox.source = self
+	hurtbox.source = self
 
 
 func _physics_process(_delta: float) -> void:

@@ -80,6 +80,33 @@ func test_position_hitbox_side_facing_flipped() -> void:
 	assert_eq(player.hitbox.position, Vector2(-player.ATTACK_HITBOX_OFFSET, 0))
 
 
+func test_attack_hitbox_and_hurtbox_are_wired_to_same_source() -> void:
+	assert_eq(player.hitbox.source, player)
+	assert_eq(player.hurtbox.source, player)
+
+
+func test_combo_hit_does_not_damage_own_hurtbox_via_physics() -> void:
+	# Regression: a downward swing's hitbox geometrically overlaps the
+	# player's own hurtbox (offset (0, 15), size 20x14 vs the hitbox's
+	# (0, 12), size 16x16) - without the Hitbox/Hurtbox source check this
+	# self-damages on every attack.
+	player.facing = player.Facing.DOWN
+	watch_signals(player.hurtbox)
+	player._perform_combo_hit()
+	await wait_physics_frames(2)
+	assert_signal_not_emitted(player.hurtbox, "damaged")
+	await wait_seconds(player.ATTACK_DURATION + player.COMBO_WINDOW + 0.05)
+
+
+func test_charged_hit_does_not_damage_own_hurtbox_via_physics() -> void:
+	player.facing = player.Facing.DOWN
+	watch_signals(player.hurtbox)
+	player._perform_charged_hit()
+	await wait_physics_frames(2)
+	assert_signal_not_emitted(player.hurtbox, "damaged")
+	await wait_seconds(player.CHARGE_ATTACK_DURATION + player.ATTACK_COOLDOWN + 0.05)
+
+
 func test_perform_combo_hit_immediately_sets_attacking_and_enables_hitbox() -> void:
 	player.facing = player.Facing.DOWN
 	player._perform_combo_hit()

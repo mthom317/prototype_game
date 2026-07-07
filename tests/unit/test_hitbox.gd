@@ -32,6 +32,37 @@ func test_on_area_entered_ignores_non_hurtbox_areas() -> void:
 	assert_signal_not_emitted(hitbox, "hit_landed")
 
 
+func test_is_same_source_false_when_source_unset() -> void:
+	hurtbox.source = null
+	assert_false(hitbox._is_same_source(hurtbox))
+
+
+func test_is_same_source_false_when_sources_differ() -> void:
+	var owner_a: Node = autofree(Node.new())
+	var owner_b: Node = autofree(Node.new())
+	hitbox.source = owner_a
+	hurtbox.source = owner_b
+	assert_false(hitbox._is_same_source(hurtbox))
+
+
+func test_is_same_source_true_when_sources_match() -> void:
+	var character: Node = autofree(Node.new())
+	hitbox.source = character
+	hurtbox.source = character
+	assert_true(hitbox._is_same_source(hurtbox))
+
+
+func test_on_area_entered_skips_hurtbox_with_same_source() -> void:
+	var character: Node = autofree(Node.new())
+	hitbox.source = character
+	hurtbox.source = character
+	watch_signals(hurtbox)
+	watch_signals(hitbox)
+	hitbox._on_area_entered(hurtbox)
+	assert_signal_not_emitted(hurtbox, "damaged")
+	assert_signal_not_emitted(hitbox, "hit_landed")
+
+
 func _make_shape() -> CollisionShape2D:
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
@@ -53,3 +84,22 @@ func test_overlapping_hitbox_and_hurtbox_deal_damage_via_physics() -> void:
 	await wait_physics_frames(2)
 
 	assert_signal_emitted(hurtbox, "damaged")
+
+
+func test_overlapping_hitbox_and_hurtbox_with_same_source_do_not_deal_damage_via_physics() -> void:
+	var character: Node = autofree(Node.new())
+	hitbox.source = character
+	hurtbox.source = character
+
+	hitbox.collision_layer = HITBOX_LAYER
+	hitbox.collision_mask = HURTBOX_LAYER
+	hitbox.add_child(_make_shape())
+
+	hurtbox.collision_layer = HURTBOX_LAYER
+	hurtbox.collision_mask = 0
+	hurtbox.add_child(_make_shape())
+
+	watch_signals(hurtbox)
+	await wait_physics_frames(2)
+
+	assert_signal_not_emitted(hurtbox, "damaged")

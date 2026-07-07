@@ -5,6 +5,7 @@ enum Facing { DOWN, UP, SIDE }
 const ATTACK_DURATION := 0.3
 const ATTACK_COOLDOWN := 0.15
 const ATTACK_HITBOX_OFFSET := 12.0
+const ICE_STEER_FACTOR := 0.06
 
 @export var speed: float = 120.0
 
@@ -12,6 +13,8 @@ var facing: Facing = Facing.DOWN
 var is_attacking: bool = false
 var can_attack: bool = true
 var potion_count: int = 0
+var has_boots: bool = false
+var _on_ice: bool = false
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health: Health = $Health
@@ -36,7 +39,7 @@ func _physics_process(_delta: float) -> void:
 		velocity = Vector2.ZERO
 	else:
 		var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-		velocity = input_vector * speed
+		velocity = _compute_movement_velocity(velocity, input_vector, speed, _on_ice and has_boots)
 		_update_animation(input_vector)
 
 	move_and_slide()
@@ -70,6 +73,31 @@ func _position_hitbox() -> void:
 
 func pick_up_potion() -> void:
 	potion_count += 1
+
+
+func pick_up_boots() -> void:
+	has_boots = true
+
+
+## Called by IcePatch on body_entered/body_exited. No effect on movement
+## without boots (see notes/07-design-questions.md section 2 - boots is
+## what lets you cross ice at all in v1, not just skate faster).
+func set_on_ice(value: bool) -> void:
+	_on_ice = value
+
+
+## Pure: off ice (or without boots), movement snaps directly to input each
+## frame, same as always. On ice with boots, there's no friction - zero
+## input keeps sliding at the current velocity instead of stopping, and
+## nonzero input steers gradually rather than snapping.
+func _compute_movement_velocity(
+	current_velocity: Vector2, input_vector: Vector2, move_speed: float, is_sliding: bool
+) -> Vector2:
+	if not is_sliding:
+		return input_vector * move_speed
+	if input_vector == Vector2.ZERO:
+		return current_velocity
+	return current_velocity.lerp(input_vector * move_speed, ICE_STEER_FACTOR)
 
 
 func _use_item() -> void:

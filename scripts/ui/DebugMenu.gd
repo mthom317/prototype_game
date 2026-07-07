@@ -21,6 +21,12 @@ const CATALOG: Dictionary = {
 	"Item":
 	{
 		"Healing Potion": "res://scenes/items/HealingPotion.tscn",
+		"Boots": "res://scenes/items/Boots.tscn",
+	},
+	"World":
+	{
+		"Pushable Block": "res://scenes/world/PushableBlock.tscn",
+		"Ice Patch": "res://scenes/world/IcePatch.tscn",
 	},
 }
 

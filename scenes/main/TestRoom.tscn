@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/items/HealingPotion.tscn" id="13_potion"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemyMushroom.tscn" id="14_mushroom"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/EnemySnake.tscn" id="15_snake"]
+[ext_resource type="PackedScene" path="res://scenes/world/RoomTransitionTrigger.tscn" id="17_trigger"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbya1"]
 texture = ExtResource("1_rlhha")
@@ -76,3 +77,11 @@ position = Vector2(200, 60)
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="HealthUI" parent="HUD" instance=ExtResource("6_healthui")]
+
+[node name="SpawnPoint_from_debug_room" type="Marker2D" parent="."]
+position = Vector2(72, 104)
+
+[node name="ToDebugRoom" parent="." instance=ExtResource("17_trigger")]
+position = Vector2(24, 104)
+target_scene_path = "res://scenes/main/DebugRoom.tscn"
+target_spawn_id = "from_test_room"

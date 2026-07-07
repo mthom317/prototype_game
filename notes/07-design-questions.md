@@ -17,7 +17,10 @@ questions until we get to them.
     2-person side project.
 - Is this primarily a learning/portfolio project, or are we aiming for
   something we'd actually release?
-  - Still open — revisiting later.
+  - **Decision:** Primarily a learning project for now. Open to it
+    becoming bigger — either by re-scoping this project toward release,
+    or by carrying pieces of it over into a new project later. Not
+    committing to a release target today.
 - How many major areas/dungeons for v1?
   - **Decision:** 1 dungeon, gated by a single ability, plus the
     overworld. Matches the couple-hours scope and keeps M2/M3 focused.

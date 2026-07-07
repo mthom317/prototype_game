@@ -22,6 +22,20 @@ was removed. Verify with the `Read` tool / open the file before wiring
 anything new in, and don't re-add anything from that original pack without
 confirming its license first.
 
+## Backdrop color palette
+
+- **Palette** — `assets/sprites/backgrounds/Palette.png`, added as a
+  `TileSetAtlasSource` on `resources/tilesets/room_tileset.tres` for use as
+  flat-color backdrop tiles (not gameplay-relevant tiles, just solid-color
+  fills). Original/self-authored by the team — not sourced from a
+  third-party pack, so no external license to track.
+- The source file is a small hand-picked color swatch grid (10x9 cells, most
+  unused/transparent). It was resized so each opaque swatch cell fills a
+  full 16x16 tile — matching this project's tile size (see
+  `notes/07-design-questions.md` section 7) — before being wired in as a
+  `TileSetAtlasSource`; only the 53 opaque cells became tiles, the
+  transparent ones were skipped. No collision.
+
 ## basicMap.tmj (removed)
 
 `assets/sprites/tilesets/basicMap.tmj` was a Tiled-authored 15x15 map (grass

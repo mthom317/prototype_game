@@ -22,6 +22,37 @@ was removed. Verify with the `Read` tool / open the file before wiring
 anything new in, and don't re-add anything from that original pack without
 confirming its license first.
 
+- **Ninja Adventure pack sheets** — all 23 tileset sheets under
+  `assets/sprites/backgrounds/pack/Tilesets/` (top-level + `Interior/`,
+  e.g. Field, Nature, Relief, VillageAbandoned, Water, House, Dungeon,
+  Desert) were bulk-added as additional `TileSetAtlasSource`s on this same
+  shared `TileSet`, each auto-sliced into 16x16 tiles, to give
+  `scenes/main/HubWorld.tscn` a full palette to hand-design the map from.
+  CC0, no license concerns (see `assets/IMPORTED_ASSETS.md`). No collision
+  by default — see "Per-layer isolated TileSets" below for how collision
+  was added selectively without affecting every layer that paints from
+  these sheets.
+
+## Per-layer isolated TileSets (HubWorld)
+
+`HubWorld.tscn`'s `Ground` node has several child `TileMapLayer`s
+(`Grass`, `Walls`, `Stone`, `NatureNBuildings`, `Leafs`). Most of them still
+reference the shared `room_tileset.tres` above. But collision is a property
+of the *tile definition* inside a `TileSet`, not the layer painting it — so
+a shared `TileSet` can't have some layers' tiles solid and others not, if
+they paint the same atlas coordinates (which `Walls` and `Grass`/`Stone` do,
+since they're all drawn from the same "Floor" sheet).
+
+`Walls` and `NatureNBuildings` therefore each get their **own
+scene-embedded `TileSet`**, containing copies of only the specific
+sources/tiles they actually use, instead of collision being added to the
+shared external resource. This keeps `Grass`/`Stone`/`Ground`/`Backgroud`
+non-solid while letting `Walls`/`NatureNBuildings` have collision. See
+CLAUDE.md's "Tile collision & Y-sorting" section for the full mechanics
+(the two-part Physics Layer + per-tile polygon requirement) and the
+bottom-tile-only collision rule for tall multi-tile objects (trees,
+buildings) — both apply directly to how these two layers are set up.
+
 ## Backdrop color palette
 
 - **Palette** — `assets/sprites/backgrounds/Palette.png`, added as a
@@ -67,5 +98,9 @@ build tiles via the scripting API rather than hand-editing `.tres`/`.tscn`
    once it's small enough to reason about visually — scripting is mainly
    valuable for bulk/initial setup).
 3. If the tile should block movement, give it a collision polygon on
-   physics layer 0 (the only physics layer currently defined on this
-   `TileSet`), sized to match the visual bounds.
+   physics layer 0, sized to match the visual bounds. Check first whether
+   the tile's source is also painted by a layer that should stay
+   non-solid (e.g. anything sharing the "Floor" sheet with `Grass`) — if
+   so, add the collision on an isolated per-layer `TileSet` instead of the
+   shared one (see "Per-layer isolated TileSets" above), not directly on
+   `room_tileset.tres`.

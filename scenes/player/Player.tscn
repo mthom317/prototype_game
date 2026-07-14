@@ -1,10 +1,10 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://cj3aka0qnlqaa"]
 
-[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_pl4yr"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/player.tres" id="2_frames"]
-[ext_resource type="Script" path="res://scripts/combat/Health.gd" id="3_health"]
-[ext_resource type="Script" path="res://scripts/combat/Hurtbox.gd" id="4_hurtbox"]
-[ext_resource type="Script" path="res://scripts/combat/Hitbox.gd" id="5_hitbox"]
+[ext_resource type="Script" uid="uid://b6ngpbdls2i2e" path="res://scripts/player/Player.gd" id="1_pl4yr"]
+[ext_resource type="SpriteFrames" uid="uid://bgdyppg38coeg" path="res://resources/sprite_frames/player.tres" id="2_frames"]
+[ext_resource type="Script" uid="uid://ctk145mrgue4r" path="res://scripts/combat/Health.gd" id="3_health"]
+[ext_resource type="Script" uid="uid://bcmytrgs2ej5q" path="res://scripts/combat/Hurtbox.gd" id="4_hurtbox"]
+[ext_resource type="Script" uid="uid://c6aworlonpotu" path="res://scripts/combat/Hitbox.gd" id="5_hitbox"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(20, 14)
@@ -12,44 +12,40 @@ size = Vector2(20, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
 size = Vector2(16, 16)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=1064089265]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_pl4yr")
-speed = 120.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 15)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=399883341]
+position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_1")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=328490466]
 sprite_frames = ExtResource("2_frames")
-animation = "idle_down"
+animation = &"idle_down"
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=996308066]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
-[node name="Health" type="Node" parent="."]
+[node name="Health" type="Node" parent="." unique_id=141820446]
 script = ExtResource("3_health")
-max_health = 12
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=859057489]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("4_hurtbox")
 invincibility_duration = 1.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=977389074]
 position = Vector2(0, 15)
 shape = SubResource("RectangleShape2D_1")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=2097745520]
 collision_layer = 8
 collision_mask = 16
 monitoring = false
 script = ExtResource("5_hitbox")
-damage = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2022861638]
 shape = SubResource("RectangleShape2D_hitbox")

@@ -43,6 +43,7 @@ var _charge_tween: Tween
 func _ready() -> void:
 	add_to_group("player")
 	hurtbox.damaged.connect(_on_hurtbox_damaged)
+	health.died.connect(_on_died)
 	hitbox.monitoring = false
 	hitbox.source = self
 	hurtbox.source = self
@@ -223,6 +224,10 @@ func _should_consume_potion(count: int) -> bool:
 func _on_hurtbox_damaged(amount: int, _hitbox: Hitbox) -> void:
 	health.apply_damage(amount)
 	_flash_invincibility()
+
+
+func _on_died() -> void:
+	DeathScreen.show_game_over()
 
 
 func _flash_invincibility() -> void:

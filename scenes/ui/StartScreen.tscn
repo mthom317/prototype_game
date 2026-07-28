@@ -1,21 +1,24 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://ssugo4eiqaa6"]
 
-[ext_resource type="Script" path="res://scripts/ui/StartScreen.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cmqs4r6hb33ky" path="res://scripts/ui/StartScreen.gd" id="1_script"]
 
-[node name="StartScreen" type="Control"]
+[node name="StartScreen" type="Control" unique_id=249729590]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=487220201]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.06, 0.06, 0.09, 1)
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="." unique_id=238808776]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -24,27 +27,30 @@ offset_left = -60.0
 offset_top = 24.0
 offset_right = 60.0
 offset_bottom = 40.0
+grow_horizontal = 2
 theme_override_font_sizes/font_size = 16
-horizontal_alignment = 1
 text = "Prototype"
+horizontal_alignment = 1
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2040457579]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1661119990]
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1607879708]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "Play"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1663181178]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "Quit"

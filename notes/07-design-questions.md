@@ -14,7 +14,7 @@ questions until we get to them.
 - How much content are we targeting for a first complete version — a
   couple of hours, a full weekend's worth, longer?
   - **Decision:** A couple of hours. Keeps the project finishable for a
-    2-person side project.
+	2-person side project.
 - Is this primarily a learning/portfolio project, or are we aiming for
   something we'd actually release?
   - **Decision:** Primarily a learning project for now. Open to it
@@ -31,7 +31,7 @@ questions until we get to them.
   cracked walls, a grapple/hookshot for gaps, boots for pushing
   blocks/crossing ice, a stronger weapon for armored enemies)
   - **Decision:** Boots — push blocks, cross ice. Single ability for
-    v1's single dungeon (see section 1).
+	v1's single dungeon (see section 1).
 - Is ability order strictly linear (fixed sequence, one per dungeon), or
   do we want any non-linearity/sequence-breaking potential?
   - N/A for v1 — only one ability/dungeon, so no ordering question yet.
@@ -39,7 +39,7 @@ questions until we get to them.
 - Do abilities serve double duty (combat AND traversal, like Zelda's
   hookshot), or are traversal and combat upgrades kept separate?
   - **Decision:** Traversal/utility only. Combat stays with the sword;
-    boots don't affect combat.
+	boots don't affect combat.
 - Is each new ability tied to unlocking the *next* dungeon, or can some be
   found optionally in the overworld?
   - **Decision:** Found in the overworld first, then used to open/progress
@@ -51,6 +51,17 @@ questions until we get to them.
   hub-and-spoke map, or something more linear/corridor-based?
   - **Decision:** Hub-and-spoke. A central hub area connects to separate
     self-contained areas (including the v1 dungeon).
+  - **Update:** Replaced the plain `HubWorld.tscn` hub with a larger,
+    themed map (`scenes/main/TestNewMap.tscn`) — still hub-and-spoke in
+    shape, just bigger and narratively grounded instead of a neutral hub.
+    Layout: a starting area (abandoned-village theme) connects to Town A,
+    which connects onward to Town B and Town C. Town C is required
+    first — an item found there gates access to Town B. Current flow:
+    `StartScreen.tscn` → `scenes/Interiors/StartingHouse.tscn` (interior
+    starting room) → `TestNewMap.tscn` (the world map) via
+    `RoomTransitionTrigger`s. Map layout is done; tile physics collision
+    across the new map is still outstanding (tracked as follow-up work,
+    not yet an issue).
 - Discrete screen-by-screen rooms with hard camera cuts (NES-style) or
   smooth continuous scrolling?
   - **Decision:** Discrete rooms, hard camera cuts. Matches the existing
@@ -111,7 +122,7 @@ questions until we get to them.
     screen. Resolves the remaining open acceptance criterion on issue #8.
 - Any specific palette/art-style reference points?
   - **Decision:** Stick with the Ninja Adventure pack's existing style —
-    no additional reference sourcing needed.
+	no additional reference sourcing needed.
 - Music scope — per-area themes, chiptune-style, how much original audio
   are we budgeting for?
   - **Decision:** Use the imported pack's music as-is (~26 CC0 tracks +

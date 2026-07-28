@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://hxsf0q8btoci"]
 
-[ext_resource type="Script" path="res://scripts/main/FirstArea.gd" id="0_firstarea"]
+[ext_resource type="Script" uid="uid://cy6c6movwipyh" path="res://scripts/main/FirstArea.gd" id="0_firstarea"]
+[ext_resource type="PackedScene" uid="uid://cj3aka0qnlqaa" path="res://scenes/player/Player.tscn" id="0_player"]
 [ext_resource type="PackedScene" path="res://scenes/world/RoomTransitionTrigger.tscn" id="0_trigger"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="0_player"]
 [ext_resource type="TileSet" uid="uid://b8rexqxqy7yd3" path="res://resources/tilesets/room_tileset.tres" id="1_tjbmr"]
 [ext_resource type="Texture2D" uid="uid://51q7c6r05elc" path="res://assets/sprites/backgrounds/pack/Tilesets/TilesetDesert.png" id="2_xj7yf"]
 
@@ -323,11 +323,11 @@ tile_set = SubResource("TileSet_g4v7s")
 
 [node name="ToHubWorld" parent="Ground" unique_id=1661160803 instance=ExtResource("0_trigger")]
 position = Vector2(-43, 52)
-target_scene_path = "res://scenes/main/HubWorld.tscn"
+target_scene_path = "uid://b411ow1x0hd0h"
 target_spawn_id = "from_first_area"
 
-[node name="SpawnPoint_from_hub_world" type="Marker2D" parent="Ground"]
+[node name="SpawnPoint_from_hub_world" type="Marker2D" parent="Ground" unique_id=1375478626]
 position = Vector2(-43, 68)
 
-[node name="Player" parent="Ground" instance=ExtResource("0_player")]
+[node name="Player" parent="Ground" unique_id=1853515622 instance=ExtResource("0_player")]
 position = Vector2(-43, 68)

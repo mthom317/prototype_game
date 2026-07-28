@@ -1,10 +1,11 @@
 extends Control
 
 ## Title screen shown on launch (see project.godot run/main_scene). "Play"
-## starts a fresh run in the hub world; "Quit" exits the game. No
+## starts a fresh run in the starting house, which connects onward into
+## the world map (TestNewMap.tscn); "Quit" exits the game. No
 ## new-game/continue split yet - that's the main menu issue (#48).
 
-const GAMEPLAY_SCENE_PATH := "res://scenes/main/HubWorld.tscn"
+const GAMEPLAY_SCENE_PATH := "res://scenes/Interiors/StartingHouse.tscn"
 
 @onready var play_button: Button = $CenterContainer/VBoxContainer/PlayButton
 @onready var quit_button: Button = $CenterContainer/VBoxContainer/QuitButton
